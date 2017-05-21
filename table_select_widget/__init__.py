@@ -4,6 +4,7 @@ from django.forms import CheckboxInput, SelectMultiple
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+import collections
 
 
 SHIFT_SELECT_JS = '''
@@ -156,9 +157,9 @@ class TableSelectMultiple(SelectMultiple):
 
 def get_underscore_attrs(attrs, item):
     for attr in attrs.split('__'):
-        if callable(attr):
+        if isinstance(attr, collections.Callable):
             item = attr(item)
-        elif callable(getattr(item, attr)):
+        elif isinstance(getattr(item, attr), collections.Callable):
             item = getattr(item, attr)()
         else:
             item = getattr(item, attr)
